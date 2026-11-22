@@ -1,0 +1,16 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 8.1.0"
+gem "puma", ">= 5.0"
+
+# Devise from this repository.
+gem "devise", path: "../.."
+
+# DynamoDB modelling libraries. Devise uses Dynamoid unless
+# DYNAMODB_LIBRARY=aws_record is set (see config/initializers/devise.rb).
+gem "dynamoid", "~> 3.10"
+gem "aws-record", "~> 2.13"
+
+group :test do
+  gem "minitest", "< 6"
+end

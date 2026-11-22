@@ -33,10 +33,17 @@ Devise.setup do |config|
   # config.parent_mailer = 'ActionMailer::Base'
 
   # ==> ORM configuration
+<% if options[:orm] == 'dynamodb' -%>
+  # Load and configure the ORM. Supports DynamoDB through the :dynamoid
+  # (default) or :aws_record modelling libraries.
+  config.dynamodb_library = :<%= options[:dynamodb_library] %>
+  require 'devise/orm/dynamodb'
+<% else -%>
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
   require 'devise/orm/<%= options[:orm] %>'
+<% end -%>
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is

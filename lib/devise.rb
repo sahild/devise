@@ -312,6 +312,12 @@ module Devise
   mattr_accessor :sign_in_after_change_password
   @@sign_in_after_change_password = true
 
+  # Which DynamoDB modelling library backs `require 'devise/orm/dynamodb'`.
+  # Supported values are :dynamoid (default) and :aws_record. It must be set
+  # before `require 'devise/orm/dynamodb'` is evaluated.
+  mattr_accessor :dynamodb_library
+  @@dynamodb_library = :dynamoid
+
   # Default way to set up Devise. Run rails generate devise_install to create
   # a fresh initializer with all configuration values.
   def self.setup

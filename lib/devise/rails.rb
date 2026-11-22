@@ -48,6 +48,10 @@ module Devise
         end
     end
 
+    rake_tasks do
+      load File.expand_path("../../tasks/devise_dynamodb.rake", __FILE__)
+    end
+
     initializer "devise.configure_zeitwerk" do
       if Rails.autoloaders.zeitwerk_enabled? && !defined?(ActionMailer)
         Rails.autoloaders.main.ignore("#{root}/app/mailers/devise/mailer.rb")

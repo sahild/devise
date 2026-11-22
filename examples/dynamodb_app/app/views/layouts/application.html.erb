@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Devise + DynamoDB</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <nav>
+      <% if user_signed_in? %>
+        Signed in as <%= current_user.email %> |
+        <%= link_to "Dashboard", dashboard_path %> |
+        <%= link_to "Edit account", edit_user_registration_path %> |
+        <%= button_to "Sign out", destroy_user_session_path, method: :delete, form: { style: "display:inline" } %>
+      <% else %>
+        <%= link_to "Sign up", new_user_registration_path %> |
+        <%= link_to "Sign in", new_user_session_path %>
+      <% end %>
+    </nav>
+
+    <% flash.each do |type, message| %>
+      <p class="flash <%= type %>"><%= message %></p>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>
