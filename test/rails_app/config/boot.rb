@@ -19,6 +19,12 @@ module Devise
     def self.rails70?
       Rails.version.start_with? '7.0'
     end
+
+    # DEVISE_ORM=dynamoid or DEVISE_ORM=aws_record run the suite against
+    # Amazon DynamoDB (devise/orm/dynamodb) using that library.
+    def self.dynamodb?
+      [:dynamoid, :aws_record].include?(DEVISE_ORM)
+    end
   end
 end
 
