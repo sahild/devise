@@ -1,0 +1,12 @@
+<h1>Your account</h1>
+
+<dl>
+  <dt>Email</dt><dd><%= current_user.email %></dd>
+  <dt>Confirmed at</dt><dd><%= current_user.confirmed_at %></dd>
+  <dt>Sign in count</dt><dd><%= current_user.sign_in_count %></dd>
+  <dt>Current sign in</dt><dd><%= current_user.current_sign_in_at %> from <%= current_user.current_sign_in_ip %></dd>
+  <dt>Last sign in</dt><dd><%= current_user.last_sign_in_at %> from <%= current_user.last_sign_in_ip %></dd>
+</dl>
+
+<p><%= link_to "Edit account", edit_user_registration_path %> · <%= link_to "Home", root_path %></p>
+<%= button_to "Sign out", destroy_user_session_path, method: :delete %>

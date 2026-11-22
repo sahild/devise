@@ -6,9 +6,31 @@ module Devise
       defined?(ActiveRecord) && model < ActiveRecord::Base
     end
 
+    def self.dynamoid?(model)
+      !!(defined?(::Dynamoid::Document) && model.include?(::Dynamoid::Document))
+    end
+
+    def self.aws_record?(model)
+      !!(defined?(::Aws::Record) && model.include?(::Aws::Record))
+    end
+
+    # True for models persisted in Amazon DynamoDB, either through Dynamoid or
+    # aws-record. See devise/orm/dynamodb.
+    def self.dynamodb?(model)
+      dynamoid?(model) || aws_record?(model)
+    end
+
     def self.included(model)
       if Devise::Orm.active_record?(model)
         model.include DirtyTrackingActiveRecordMethods
+      elsif Devise::Orm.dynamodb?(model)
+        unless defined?(Devise::Orm::Dynamodb)
+          raise "#{model} is a DynamoDB model but Devise's DynamoDB support is not loaded. " \
+            "Add `require 'devise/orm/dynamodb'` to config/initializers/devise.rb."
+        end
+
+        model.include Devise::Orm::Dynamodb.compat_module_for(model)
+        Devise::Orm::Dynamodb.register(model)
       else
         model.include DirtyTrackingMongoidMethods
       end

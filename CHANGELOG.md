@@ -1,3 +1,11 @@
+### Unreleased
+
+* enhancements
+  * Add Amazon DynamoDB support through [Dynamoid](https://github.com/Dynamoid/dynamoid) (default) or [aws-record](https://github.com/aws/aws-sdk-ruby-record), selected with `config.dynamodb_library` and enabled with `require 'devise/orm/dynamodb'`. Supports the `database_authenticatable`, `rememberable`, `validatable`, `confirmable`, `trackable`, `recoverable` and `lockable` modules, including email uniqueness validation. See "Amazon DynamoDB" in the README for setup and for the behaviours that differ from Active Record.
+  * `rails generate devise:install --orm=dynamodb [--dynamodb-library=aws_record]` and `rails generate devise MODEL` (with the generator ORM set to `:dynamodb`, `:dynamoid` or `:aws_record`) generate DynamoDB models.
+  * Add `devise:dynamodb:create`, `devise:dynamodb:drop` and `devise:dynamodb:status` rake tasks to manage the tables of Devise DynamoDB models.
+  * Add a sample application using DynamoDB in `examples/dynamodb_app`.
+
 ### 5.0.4 - 2026-05-08
 
 * security fixes

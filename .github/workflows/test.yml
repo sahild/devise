@@ -31,6 +31,8 @@ jobs:
         orm:
           - active_record
           - mongoid
+          - dynamoid
+          - aws_record
         exclude:
           - gemfile: Gemfile
             ruby: '3.1'
@@ -60,6 +62,13 @@ jobs:
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       DEVISE_ORM: ${{ matrix.orm }}
+      DYNAMODB_ENDPOINT: http://localhost:8000
+    services:
+      # Only used by the dynamoid and aws_record ORMs; cheap to start for the others.
+      dynamodb:
+        image: amazon/dynamodb-local:latest
+        ports:
+          - 8000:8000
     steps:
       - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1

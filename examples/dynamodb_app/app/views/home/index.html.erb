@@ -1,0 +1,20 @@
+<h1>Devise on Amazon DynamoDB</h1>
+
+<p>
+  Users are stored in DynamoDB through
+  <strong><%= Devise.dynamodb_library %></strong>
+  (table <code><%= Devise::Orm::Dynamodb::Tables.table_name(User) %></code>).
+</p>
+
+<% if user_signed_in? %>
+  <p>Signed in as <%= current_user.email %>. <%= link_to "Your account", account_path %></p>
+  <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
+<% else %>
+  <ul>
+    <li><%= link_to "Sign up", new_user_registration_path %></li>
+    <li><%= link_to "Sign in", new_user_session_path %></li>
+    <li><%= link_to "Forgot your password?", new_user_password_path %></li>
+    <li><%= link_to "Resend confirmation instructions", new_user_confirmation_path %></li>
+    <li><%= link_to "Resend unlock instructions", new_user_unlock_path %></li>
+  </ul>
+<% end %>

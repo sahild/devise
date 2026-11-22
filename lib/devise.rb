@@ -270,6 +270,12 @@ module Devise
   mattr_accessor :reload_routes
   @@reload_routes = true
 
+  # Library used to talk to DynamoDB when the :dynamodb ORM is selected
+  # (`require 'devise/orm/dynamodb'`). Supported values are :dynamoid (default)
+  # and :aws_record. It must be set before the ORM file is required.
+  mattr_accessor :dynamodb_library
+  @@dynamodb_library = :dynamoid
+
   # PRIVATE CONFIGURATION
 
   # Store scopes mappings.

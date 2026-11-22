@@ -1,0 +1,20 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 8.1.4", ">= 8.1.4.1"
+gem "propshaft"
+gem "puma", ">= 5.0"
+gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "bootsnap", require: false
+
+# Devise from this repository, with Amazon DynamoDB support.
+gem "devise", path: "../.."
+
+# DynamoDB libraries supported by Devise. Dynamoid is the default; start the
+# app with DYNAMODB_LIBRARY=aws_record to use aws-record instead. A real app
+# only needs the one it uses.
+gem "dynamoid", "~> 3.10"
+gem "aws-record", "~> 2.13"
+
+group :development, :test do
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+end

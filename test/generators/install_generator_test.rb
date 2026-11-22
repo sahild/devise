@@ -31,4 +31,39 @@ class InstallGeneratorTest < Rails::Generators::TestCase
 
     assert_file "config/initializers/devise.rb", /config\.responder\.error_status = #{error_status.inspect}/
   end
+
+  test "dynamodb ORM selects the library before requiring the ORM" do
+    run_generator(["--orm=dynamodb"])
+    assert_file "config/initializers/devise.rb" do |content|
+      assert_match(/config\.dynamodb_library = :dynamoid\n  require 'devise\/orm\/dynamodb'/, content)
+    end
+  end
+
+  test "dynamodb ORM with the aws-record library" do
+    run_generator(["--orm=dynamodb", "--dynamodb-library=aws_record"])
+    assert_file "config/initializers/devise.rb", /config\.dynamodb_library = :aws_record/
+  end
+
+  test "dynamodb library names are accepted as the ORM" do
+    run_generator(["--orm=aws_record"])
+    assert_file "config/initializers/devise.rb" do |content|
+      assert_match(/config\.dynamodb_library = :aws_record/, content)
+      assert_match(/require 'devise\/orm\/dynamodb'/, content)
+    end
+  end
+
+  test "rejects unknown dynamodb libraries" do
+    stderr = capture(:stderr) do
+      run_generator(["--orm=dynamodb", "--dynamodb-library=mongo"])
+    end
+    assert_match(/Unknown DynamoDB library "mongo"/, stderr)
+    assert_no_file "config/initializers/devise.rb"
+  end
+
+  test "other ORMs do not get DynamoDB configuration" do
+    run_generator(["--orm=active_record"])
+    assert_file "config/initializers/devise.rb" do |content|
+      assert_no_match(/dynamodb_library/, content)
+    end
+  end
 end
