@@ -1,0 +1,7 @@
+# ActiveModel does not define the :taken message (ActiveRecord and Mongoid ship
+# it in their own locale files), so the DynamoDB uniqueness validator provides
+# the same default text. Applications can override it as usual.
+en:
+  errors:
+    messages:
+      taken: "has already been taken"

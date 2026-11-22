@@ -120,7 +120,7 @@ We hope that you will consider contributing to Devise. Please read this short ov
 https://github.com/heartcombo/devise/wiki/Contributing
 
 You will usually want to write tests for your changes.  To run the test suite, go into Devise's top-level directory and run `bundle install` and `bin/test`.
-Devise works with multiple Ruby and Rails versions, and ActiveRecord and Mongoid ORMs, which means you can run the test suite with some modifiers: `DEVISE_ORM` and `BUNDLE_GEMFILE`.
+Devise works with multiple Ruby and Rails versions, and ActiveRecord, Mongoid and DynamoDB (Dynamoid / aws-record) ORMs, which means you can run the test suite with some modifiers: `DEVISE_ORM` and `BUNDLE_GEMFILE`.
 
 #### DEVISE_ORM
 Since Devise supports both Mongoid and ActiveRecord, we rely on this variable to run specific code for each ORM.
@@ -131,6 +131,12 @@ DEVISE_ORM=mongoid bin/test
 ==> Devise.orm = :mongoid
 ```
 When running the tests for Mongoid, you will need to have a MongoDB server (version 2.0 or newer) running on your system.
+
+To run the tests for DynamoDB, pass `dynamoid` or `aws_record`. You need [DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) listening on `http://localhost:8000` (override with `DYNAMODB_ENDPOINT`), e.g. `docker run -p 8000:8000 amazon/dynamodb-local`:
+```
+DEVISE_ORM=dynamoid bin/test
+DEVISE_ORM=aws_record bin/test
+```
 
 Please note that the command output will show the variable value being used.
 
@@ -729,7 +735,18 @@ config.log_level = :warn
 
 ### Other ORMs
 
-Devise supports ActiveRecord (default) and Mongoid. To select another ORM, simply require it in the initializer file.
+Devise supports ActiveRecord (default), Mongoid and Amazon DynamoDB (through [Dynamoid](https://github.com/Dynamoid/dynamoid) or [aws-record](https://github.com/aws/aws-sdk-ruby-record)). To select another ORM, simply require it in the initializer file.
+
+#### DynamoDB
+
+```console
+rails generate devise:install --orm=dynamodb                                  # Dynamoid (default)
+rails generate devise:install --orm=dynamodb --dynamodb-library=aws_record    # aws-record
+rails generate devise User
+bin/rails devise:dynamodb:create_tables
+```
+
+The `database_authenticatable`, `rememberable`, `validatable`, `confirmable`, `trackable`, `recoverable` and `lockable` modules are supported. Some database behaviour cannot be matched exactly on DynamoDB (for example, email uniqueness is checked by the application and is not atomic). See the [DynamoDB guide](guides/dynamodb.md) for model definitions, rake tasks and the full list of differences, and [examples/dynamodb_app](examples/dynamodb_app) for a sample application.
 
 ### Rails API Mode
 
